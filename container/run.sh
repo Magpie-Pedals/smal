@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 IMAGE="${IMAGE:-smal}"
-PORT="${PORT:-3000}"
+PORT="${PORT:-1112}"
 DATA_DIR="${DATA_DIR:-$ROOT/data}"
 
 mkdir -p "$DATA_DIR"
