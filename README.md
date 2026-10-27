@@ -1,6 +1,8 @@
 # smal
 
-A flat-file audio store built with TypeScript, Node and Express. Files live in `data/files/<tag>/<username>/<track>`; there is no database or metadata file. A vanilla JS front-end is served at `/`.
+A flat-file audio store built with TypeScript, Node and Express. Files live in `data/files/<tag>/<username>/<track>`. 
+
+There is no database or metadata file. A vanilla JS front-end is served at `/`.
 
 ## Setup
 
