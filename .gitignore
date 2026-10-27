@@ -1,0 +1,7 @@
+node_modules/
+dist/
+data/files/*
+data/auth.json.bak*
+data/auth.json
+data/tags.txt
+!data/files/.gitkeep

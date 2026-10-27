@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>smal</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <img class="logo" src="/magpie.png" alt="magpie" />
+        <h1>smal</h1>
+        <h2>smal:magpie:audio:library (thing)</h2>
+        <hr>
+        <div class='special-msg'>
+          <p>magpie pirates collab submission. if you have already submitted a collab file here before, start on step 3:</p>
+          <ol>
+            <li>
+              choose a username. this is how we will know who you are and who this file is from. if you're on discord, your discord username is highly preferable here. this is also the username you will use for all future collab submissions. so make sure you remember it, along with your key:
+            </li>
+            <li>
+              choose an auth key. this is just a string that will allow someone to submit files here with your username. it isn't really a "password" or related to security. <strong>do not enter anything here that you use as a password anywhere else or that has any personal information!</strong>
+            </li>
+            <li>
+              enter your username and auth key into the form. click "authorize".
+            </li>
+            <li>
+              choose which collab you are submitting for from teh dropdown.
+            </li>
+            <li>
+              browse for a valid file*.
+            </li>
+            <li>click "upload"</li>
+          </ol>
+          <p>
+            * make the filename be in the format of artist name - track title for music collabs. that is how you will actually be credited. for files that aren't music tracks, just be as descriptive as possible. 
+          </p>
+          <br>
+          <p>
+            valid file types: wav | flac | ogg | mp3 
+          </p>
+          <p>
+            file must be less than 32mb!
+          </p>
+          <hr>
+          <p>
+            any questions should be asked in the <a href="#">discord server</a> (Either in <a href="https://discord.com/channels/398281089254293504/411094096187359232">#hangout</a> or the channel for the collab)
+          </p>
+        </div>
+        <hr>
+        <p>made with <4 by replicat (and mostly not vibe coded)</p>
+        <p>h@x0rz read <a href="/api/v1">the docs</a></p>
+        <hr>
+        <p>enter your username and key below</p>
+        <p>if you don't have an account <a href="#" onclick="alert('the super secret is `abc123`')">pay attention to this</a></p>
+      </header>
+      <hr>
+      <section id="auth-section">
+        <h2>auth</h2>
+        <form id="auth-form">
+          <div class="row">
+            <label>
+              username
+              <input id="username" name="username" maxlength="64" required autocomplete="username" />
+            </label>
+            <label>
+              auth key
+              <input id="authKey" name="authKey" type="password" required autocomplete="off" />
+            </label>
+          </div>
+          <div class="auth-actions">
+            <button type="submit">authorize</button>
+            <button id="clear-auth" type="button">💀</button>
+            <span id="auth-status">[not authorized]</span>
+          </div>
+        </form>
+      </section>
+      <hr>
+      <section id="upload-section">
+        <h2>upload</h2>
+        <form id="upload-form">
+          <div class="row">
+            <label>
+              tag
+              <select id="tag-select" name="tag" required></select>
+            </label>
+            <label>
+              file
+              <input id="file" name="file" type="file" accept=".wav,.mp3,.flac,.ogg,audio/*" required />
+            </label>
+          </div>
+          <button type="submit">upload</button>
+        </form>
+      </section>
+      <hr>
+      <p id="status" role="status"></p>
+      <section id="listen-section" hidden>
+        <h2>listen</h2>
+        <div class="toolbar">
+          <div id="filters" class="filters"></div>
+          <button id="refresh" type="button">refresh</button>
+        </div>
+        <ul id="files"></ul>
+      </section>
+    </main>
+
+    <template id="file-template">
+      <li class="file">
+        <div class="file-head">
+          <div>
+            <h2 class="track"></h2>
+            <p class="meta"></p>
+          </div>
+          <div class="actions">
+            <a class="download" download>download</a>
+            <button class="delete" type="button">delete</button>
+          </div>
+        </div>
+        <audio controls preload="none"></audio>
+      </li>
+    </template>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
