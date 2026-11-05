@@ -13,7 +13,8 @@
         <h1>smal</h1>
         <h2>smal:magpie:audio:library (thing)</h2>
         <hr>
-        <div class='special-msg'>
+        <h2><a href="#" onclick="document.getElementById('special-msg').classList.toggle('hidden'); return false;">Instructions</a></h2>
+        <div id='special-msg' class='hidden'>
           <p>magpie pirates collab submission. if you have already submitted a collab file here before, start on step 3:</p>
           <ol>
             <li>
@@ -23,10 +24,10 @@
               choose an auth key. this is just a string that will allow someone to submit files here with your username. it isn't really a "password" or related to security. <strong>do not enter anything here that you use as a password anywhere else or that has any personal information!</strong>
             </li>
             <li>
-              enter your username and auth key into the form. click "authorize".
+              enter your username and auth key into the form. click "authorize". if this is the first time you have ever submitted, you're creating a new user, so you have to first put in the <a href="#" onclick="alert('the super secret is `magpiepirates`')">super secret key</a>.
             </li>
             <li>
-              choose which collab you are submitting for from teh dropdown.
+              choose which collab you are submitting for from the dropdown.
             </li>
             <li>
               browse for a valid file*.
@@ -38,7 +39,7 @@
           </p>
           <br>
           <p>
-            valid file types: wav | flac | ogg | mp3 
+            valid file types: wav | flac | ogg | mp3 | jpg | png | webp
           </p>
           <p>
             file must be less than 32mb!
@@ -53,7 +54,7 @@
         <p>h@x0rz read <a href="/api/v1">the docs</a></p>
         <hr>
         <p>enter your username and key below</p>
-        <p>if you don't have an account <a href="#" onclick="alert('the super secret is `abc123`')">pay attention to this</a></p>
+        <p>if you don't have an account <a href="#" onclick="alert('the super secret is `magpiepirates`')">pay attention to this</a></p>
       </header>
       <hr>
       <section id="auth-section">
@@ -82,12 +83,12 @@
         <form id="upload-form">
           <div class="row">
             <label>
-              tag
+              collab
               <select id="tag-select" name="tag" required></select>
             </label>
             <label>
               file
-              <input id="file" name="file" type="file" accept=".wav,.mp3,.flac,.ogg,audio/*" required />
+              <input id="file" name="file" type="file" accept=".wav,.mp3,.flac,.ogg,audio/*,.jpg,.png,.webp,image/*" required />
             </label>
           </div>
           <button type="submit">upload</button>
@@ -118,6 +119,9 @@
           </div>
         </div>
         <audio controls preload="none"></audio>
+        <a class="img-link" target="_blank">
+          <img class="thumb" />
+        </a>
       </li>
     </template>
 

@@ -77,14 +77,18 @@ async function api(path, options) {
   const res = await fetch(path, options);
   if (!res.ok) {
     let message = `${res.status} ${res.statusText}`;
+    let code;
     try {
       const body = await res.json();
-      if (body.error) message = body.error;
+      code = body.error;
+      if (body.message) message = body.message;
+      else if (body.error) message = body.error;
     } catch {
       // response was not JSON
     }
     const error = new Error(message);
     error.status = res.status;
+    error.code = code;
     throw error;
   }
   return res;
@@ -156,6 +160,7 @@ function renderFiles() {
   }
 
   for (const file of visible) {
+    console.log(file);
     const node = template.content.firstElementChild.cloneNode(true);
     node.querySelector(".track").textContent = file.track;
     node.querySelector(".meta").textContent = [
@@ -167,7 +172,20 @@ function renderFiles() {
 
     const url = fileUrl(file);
     const audio = node.querySelector("audio");
-    audio.src = url;
+    const img_link = node.querySelector(".img-link");
+    const img = node.querySelector("img");
+    
+    if (file.mimeType.startsWith("audio"))
+    {
+      img_link.remove();
+      audio.src = url;
+    }
+    else if (file.mimeType.startsWith("image"))
+    {
+      audio.remove();
+      img_link.href = url;
+      img.src = url;
+    }
 
     const download = node.querySelector(".download");
     download.href = url;
@@ -280,7 +298,16 @@ authForm.addEventListener("submit", async (event) => {
         }
       }
     } catch (createErr) {
-      authFailure(`account creation failed: ${createErr.message}`);
+      console.error(createErr);
+      if (createErr.code === "user_already_exists") {
+        authFailure("That username is already taken.");
+      } else if (createErr.code === "userkey_already_exists") {
+        authKeyInput.value = "";
+        authFailure(`account creation failed: ${createErr.message}`);
+      } else {
+        usernameInput.value = "";
+        authFailure(`account creation failed: ${createErr.message}`);
+      }
     }
   } finally {
     button.disabled = false;

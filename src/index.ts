@@ -287,7 +287,6 @@ app.delete("/api/v1/rm/:tag/:username/:track", async (req: Request, res: Respons
 app.post("/api/v1/useradd", async (req: Request, res: Response) => {
   const body = req.body as Record<string, unknown>;
   const auth = await loadAuth();
-
   const key = body.key;
   if (
     typeof key !== "string" ||
@@ -307,7 +306,18 @@ app.post("/api/v1/useradd", async (req: Request, res: Response) => {
   }
 
   if (Object.prototype.hasOwnProperty.call(auth, username)) {
-    res.status(409).json({ error: "user already exists" });
+    res.status(409).json({
+      error: "user_already_exists",
+      message: "user already exists",
+    });
+    return;
+  }
+
+  if (Object.values(auth).includes(userkey)) {
+    res.status(409).json({
+      error: "userkey_already_exists",
+      message: "userkey already exists",
+    });
     return;
   }
 

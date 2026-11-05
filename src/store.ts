@@ -21,6 +21,9 @@ const MIME_TYPES: Record<string, string> = {
   mp3: "audio/mpeg",
   flac: "audio/flac",
   ogg: "audio/ogg",
+  jpg: "image/jpeg",
+  png: "image/png",
+  webp: "image/webp"
 };
 
 export async function loadAuth(): Promise<Record<string, string>> {
