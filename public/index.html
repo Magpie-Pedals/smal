@@ -4,13 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>smal</title>
-    <link rel="stylesheet" href="/style.css" />
+    <link id="theme" rel="stylesheet" href="/styleA.css" />
   </head>
   <body>
     <main>
       <header>
         <img class="logo" src="/magpie.png" alt="magpie" />
-        <h1>smal</h1>
+        <div style="display: flex; align-items: center; gap: 0.75rem">
+          <h1>smal</h1>
+          <button id="theme-toggle" type="button">[change theme]</button>
+        </div>
         <h2>smal:magpie:audio:library (thing)</h2>
         <hr>
         <h2><a href="#" onclick="document.getElementById('special-msg').classList.toggle('hidden'); return false;">Instructions</a></h2>
