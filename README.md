@@ -20,6 +20,12 @@ The server listens on port `3000` by default. Set `PORT` to change it, and `DATA
 - `archiver`: streams the per-tag zip download
 - `tsx`: runs the TypeScript source directly
 
+## Themes
+
+The front-end ships two stylesheets, `public/styleA.css` and `public/styleB.css`. Theme A loads by default. The `[change theme]` button beside the title swaps the active stylesheet at runtime, and the choice is stored in `localStorage` under `smal.theme` (`a` or `b`).
+
+Both stylesheets define the same custom properties on `:root` (`--fg`, `--muted`, `--bg`, `--panel`, `--line`, `--accent`, `--link`), each with a light and a dark variant, so adding a theme means providing those variables and registering it in `THEMES` in `public/app.js`.
+
 ## Configuration
 
 Users and auth keys are stored in `data/auth.json`:
