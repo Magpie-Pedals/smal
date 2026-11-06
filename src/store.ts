@@ -5,6 +5,7 @@ const DATA_DIR = process.env.DATA_DIR ?? path.resolve(process.cwd(), "data");
 const FILES_DIR = path.join(DATA_DIR, "files");
 const AUTH_FILE = path.join(DATA_DIR, "auth.json");
 const TAGS_FILE = path.join(DATA_DIR, "tags.txt");
+const INACTIVE_TAGS_FILE = path.join(DATA_DIR, "tags-inactive.txt");
 
 interface FileEntry {
   id: string;
@@ -40,6 +41,22 @@ export async function loadTags(): Promise<string[]> {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter((line) => line.length > 0);
+}
+
+export async function loadInactiveTags(): Promise<string[]> {
+  const raw = await fs.readFile(INACTIVE_TAGS_FILE, "utf8");
+  return raw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+}
+
+export async function writeTags(tags: string[]): Promise<void> {
+  await fs.writeFile(TAGS_FILE, tags.join("\n") + "\n");
+}
+
+export async function writeInactiveTags(tags: string[]): Promise<void> {
+  await fs.writeFile(INACTIVE_TAGS_FILE, tags.join("\n") + "\n");
 }
 
 async function ensureFilesDir(): Promise<void> {

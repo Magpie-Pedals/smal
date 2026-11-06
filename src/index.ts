@@ -6,6 +6,7 @@ import {
   entryId,
   filePath,
   isValidSegment,
+  loadInactiveTags,
   listFiles,
   listTagFiles,
   loadAuth,
@@ -13,7 +14,9 @@ import {
   mimeFor,
   readEntry,
   removeFile,
+  writeInactiveTags,
   writeAuthWithBackup,
+  writeTags,
   writeFile,
 } from "./store";
 import { API_INDEX } from "./api-index";
@@ -127,6 +130,36 @@ app.get("/api/v1/ls", async (req: Request, res: Response) => {
 
 app.get("/api/v1/ls/tags", async (_req: Request, res: Response) => {
   res.json(await loadTags());
+});
+
+app.get("/api/v1/ls/filter-tags", async (_req: Request, res: Response) => {
+  const tags = await loadTags();
+  const inactiveTags = await loadInactiveTags();
+  res.json([...new Set([...tags, ...inactiveTags])]);
+});
+
+app.put("/api/v1/tag", async (req: Request, res: Response) => {
+  await assertAdminKey(req);
+  const body = req.body as Record<string, unknown>;
+  const tag = field(body.tag, "tag", LIMITS.tag);
+  part(tag, "tag", LIMITS.tag);
+
+  const tags = await loadTags();
+  if (tags.includes(tag)) {
+    res.status(409).json({ error: "tag_already_exists", message: "tag already exists" });
+    return;
+  }
+
+  const inactiveTags = await loadInactiveTags();
+  if (inactiveTags.includes(tag)) {
+    await writeTags([...tags, tag]);
+    await writeInactiveTags(inactiveTags.filter((inactiveTag) => inactiveTag !== tag));
+    res.status(200).json({ tag });
+    return;
+  }
+
+  await writeTags([...tags, tag]);
+  res.status(201).json({ tag });
 });
 
 app.get("/api/v1/ls/users", async (req: Request, res: Response) => {
@@ -254,6 +287,32 @@ app.get("/api/v1/dl/:tag/:username/:track", async (req: Request, res: Response) 
     `inline; filename*=UTF-8''${encodeURIComponent(parts.track)}`
   );
   res.sendFile(filePath(parts.tag, parts.username, parts.track));
+});
+
+app.delete("/api/v1/rm/:tag", async (req: Request, res: Response) => {
+  await assertAdminKey(req);
+  const tag = req.params.tag;
+  if (
+    typeof tag !== "string" ||
+    !isValidSegment(tag) ||
+    tag.length > LIMITS.tag
+  ) {
+    res.status(400).json({ error: "invalid tag" });
+    return;
+  }
+
+  const tags = await loadTags();
+  if (!tags.includes(tag)) {
+    res.status(404).json({ error: "not found" });
+    return;
+  }
+
+  const inactiveTags = await loadInactiveTags();
+  await writeTags(tags.filter((activeTag) => activeTag !== tag));
+  if (!inactiveTags.includes(tag)) {
+    await writeInactiveTags([...inactiveTags, tag]);
+  }
+  res.status(204).end();
 });
 
 app.delete("/api/v1/rm/:tag/:username/:track", async (req: Request, res: Response) => {

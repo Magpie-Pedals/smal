@@ -40,6 +40,8 @@ speech
 field-recording
 ```
 
+Deactivated tags are stored in `data/tags-inactive.txt`. Tags in that file are not valid for uploads until reactivated.
+
 Blank lines are ignored. A tag must also be a valid path segment, so tag names containing `/`, `\`, control characters, `.` or `..` cannot be used.
 
 ## Access
@@ -53,11 +55,14 @@ All POST routes requite `authKey` in the body.
 - `GET /api/v1`: API index
 - `GET /api/v1/ls`: list files
 - `GET /api/v1/ls/tags`: list tags
+- `GET /api/v1/ls/filter-tags`: list active and inactive tags for filters
 - `GET /api/v1/ls/users`: list users
+- `PUT /api/v1/tag`: add or reactivate a tag
 - `POST /api/v1/auth`: validate a username and key
 - `POST /api/v1/up`: upload a file
 - `GET /api/v1/dl/:tag`: download a zip of files in a tag
 - `GET /api/v1/dl/:tag/:username/:track`: download a file
+- `DELETE /api/v1/rm/:tag`: deactivate a tag
 - `DELETE /api/v1/rm/:tag/:username/:track`: delete a file
 - `POST /api/v1/useradd`: add a user
 
@@ -107,6 +112,34 @@ Returns the tag list as a JSON array.
 
 ```sh
 curl http://localhost:3000/api/v1/ls/tags
+```
+
+### `GET /api/v1/ls/filter-tags`
+
+Returns active and inactive tags as a JSON array for the file filters. This does
+not make inactive tags available for uploads.
+
+### `PUT /api/v1/tag`
+
+Adds a tag or reactivates an inactive tag. Requires the admin auth key as `?key=<authKey>`.
+
+Returns `201` for a new tag, `200` for a reactivated tag, and `409` if the tag is already active.
+
+```sh
+curl -X PUT \
+     -H 'Content-Type: application/json' \
+     -d '{"tag":"new-tag"}' \
+     'http://localhost:3000/api/v1/tag?key=admin'
+```
+
+### `DELETE /api/v1/rm/:tag`
+
+Deactivates a tag by moving it from `tags.txt` to `tags-inactive.txt`. Requires the admin auth key as `?key=<authKey>`.
+
+Returns `204` on success or `404` if the tag is not active.
+
+```sh
+curl -X DELETE 'http://localhost:3000/api/v1/rm/new-tag?key=admin'
 ```
 
 ### `GET /api/v1/ls/users`

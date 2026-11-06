@@ -17,6 +17,7 @@ const template = document.querySelector("#file-template");
 const state = {
   files: [],
   tags: [],
+  filterTags: [],
   tag: "all",
   username: null,
   authKey: null,
@@ -124,7 +125,7 @@ function renderFilters() {
   });
   filtersEl.append(all);
 
-  for (const tag of state.tags) {
+  for (const tag of state.filterTags) {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = tag;
@@ -202,8 +203,12 @@ async function loadFiles() {
 }
 
 async function loadTags() {
-  const res = await api("/api/v1/ls/tags");
-  state.tags = await res.json();
+  const [tagsRes, filterTagsRes] = await Promise.all([
+    api("/api/v1/ls/tags"),
+    api("/api/v1/ls/filter-tags"),
+  ]);
+  state.tags = await tagsRes.json();
+  state.filterTags = await filterTagsRes.json();
 
   tagSelect.replaceChildren();
   for (const tag of state.tags) {

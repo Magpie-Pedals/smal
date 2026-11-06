@@ -16,6 +16,17 @@ export const API_INDEX = {
     },
     {
       method: "GET",
+      path: "/api/v1/ls/filter-tags",
+      description: "List active and inactive tags for filters",
+    },
+    {
+      method: "PUT",
+      path: "/api/v1/tag",
+      description: "Add or reactivate a tag",
+      body: { tag: "string" },
+    },
+    {
+      method: "GET",
       path: "/api/v1/ls/users",
       description: "List users",
     },
@@ -41,6 +52,11 @@ export const API_INDEX = {
       method: "GET",
       path: "/api/v1/dl/:tag/:username/:track",
       description: "Download a file",
+    },
+    {
+      method: "DELETE",
+      path: "/api/v1/rm/:tag",
+      description: "Deactivate a tag",
     },
     {
       method: "DELETE",
