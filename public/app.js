@@ -13,6 +13,30 @@ const authStatus = document.querySelector("#auth-status");
 const clearAuthButton = document.querySelector("#clear-auth");
 const uploadSection = document.querySelector("#upload-section");
 const template = document.querySelector("#file-template");
+const themeLink = document.querySelector("#theme");
+const themeButton = document.querySelector("#theme-toggle");
+
+const STORAGE_THEME = "smal.theme";
+const THEMES = { a: "/styleA.css", b: "/styleB.css" };
+
+let theme = "a";
+try {
+  if (localStorage.getItem(STORAGE_THEME) === "b") theme = "b";
+} catch {
+  // storage is unavailable
+}
+
+themeLink.href = THEMES[theme];
+
+themeButton.addEventListener("click", () => {
+  theme = theme === "a" ? "b" : "a";
+  themeLink.href = THEMES[theme];
+  try {
+    localStorage.setItem(STORAGE_THEME, theme);
+  } catch {
+    // storage is unavailable
+  }
+});
 
 const state = {
   files: [],
