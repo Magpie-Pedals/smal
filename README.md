@@ -13,6 +13,10 @@ npm start
 
 The server listens on port `3000` by default. Set `PORT` to change it, and `DATA_DIR` to point at a different data directory. For development, run `npm run dev`.
 
+The Podman runner joins the DNS-enabled `giorgio-smal` network and registers
+the container as `smal`, so other containers on that network can reach the API
+at `http://smal:3000`.
+
 ## Dependencies
 
 - `express`: HTTP server and routing
